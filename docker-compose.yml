@@ -1,0 +1,27 @@
+version: '3.8'
+
+networks:
+  monitoring:
+
+services:
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    volumes:
+      - ./config/prometheus.yml:/etc/prometheus/prometheus.yml
+    command: 
+      - --config.file=/etc/prometheus/prometheus.yml
+    ports:
+      - 9090:9090
+    networks:
+      - monitoring
+  
+  snmp-exporter:
+    image: prom/snmp-exporter
+    container_name: snmp-exporter
+    volumes:
+      - ./config/snmp.yml:/etc/snmp_exporter/snmp.yml
+    ports:
+      - 9116:9116
+    networks:
+      - monitoring

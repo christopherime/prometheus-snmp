@@ -1,0 +1,31 @@
+global:
+  # scrape targets every 1 minute
+  scrape_interval: 1m
+
+scrape_configs:
+
+# source and more doc https://github.com/prometheus/snmp_exporter
+  - job_name: 'snmp_exporter'
+    # 2m scrape_interval for this job
+    scrape_interval: 2m
+    # 10s timeout cause snmp is UDP and we don't want to wait too long
+    scrape_timeout: 10s
+    # The target you wanna SNMP to
+    static_configs:
+      - targets: ['localhost:9100']
+        # Added label to identify the target who get SNMP
+        labels:
+          job: 'snmp_exporter'
+          instance: 'localhost'
+    metrics_path: /snmp
+    # SNMP module who is set in snmp.yml
+    params:
+      module: [if_mib]
+    # Relabel config to passe the request to the snmp-exporter
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: snmp-exporter:9116
