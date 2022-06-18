@@ -21,3 +21,7 @@ modules:
         ignore: true # Lookup metric
       ifType:
         type: EnumAsInfo
+    version: 2
+    auth:
+      # Community string is used with SNMP v1 and v2. Defaults to "public".
+      community: lolilol
