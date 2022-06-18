@@ -12,7 +12,7 @@ scrape_configs:
     scrape_timeout: 10s
     # The target you wanna SNMP to
     static_configs:
-      - targets: ['localhost:9100']
+      - targets: ['localhost']
         # Added label to identify the target who get SNMP
         labels:
           job: 'snmp_exporter'
