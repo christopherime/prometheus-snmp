@@ -1,0 +1,27 @@
+modules:
+  # Extracted from https://github.com/prometheus/snmp_exporter/blob/main/generator/generator.yml
+  # Default IF-MIB interfaces table with ifIndex.
+  if_mib:
+    walk: [sysUpTime, interfaces, ifXTable]
+    lookups:
+      - source_indexes: [ifIndex]
+        lookup: ifAlias
+      - source_indexes: [ifIndex]
+        # Uis OID to avoid conflict with PaloAlto PAN-COMMON-MIB.
+        lookup: 1.3.6.1.2.1.2.2.1.2 # ifDescr
+      - source_indexes: [ifIndex]
+        # Use OID to avoid conflict with Netscaler NS-ROOT-MIB.
+        lookup: 1.3.6.1.2.1.31.1.1.1.1 # ifName
+    overrides:
+      ifAlias:
+        ignore: true # Lookup metric
+      ifDescr:
+        ignore: true # Lookup metric
+      ifName:
+        ignore: true # Lookup metric
+      ifType:
+        type: EnumAsInfo
+    version: 2
+    auth:
+      # Community string is used with SNMP v1 and v2. Defaults to "public".
+      community: lolilol
